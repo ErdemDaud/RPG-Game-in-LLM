@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to RPG</title>
+    <style>
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        #response {
+            margin-bottom: 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        #response p {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+            word-spacing: 1px;
+        }
+
+        #response p:has(strong:first-child:contains("You:")) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            margin-left: 20px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        #response p:has(strong:first-child:contains("Narrator:")) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            margin-right: 20px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            white-space: pre-wrap;
+        }
+
+        #response p:has(strong:first-child:contains("System:")) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        #response p:has(strong:first-child:contains("Error:")) {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #prompt {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #prompt:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .send-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .choices-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .choice-btn {
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .choice-btn:nth-child(1) {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .choice-btn:nth-child(2) {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        }
+
+        .choice-btn:nth-child(3) {
+            background: linear-gradient(135deg, #45b7d1 0%, #96c93d 100%);
+        }
+
+        .choice-btn:nth-child(4) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .choice-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-style: italic;
+            margin: 10px 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .choices-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .input-section {
+                flex-direction: column;
+            }
+
+            #response {
+                height: 300px;
+            }
+        }
+
+        /* Scrollbar styling for response area */
+        #response::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #response::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #response::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        #response::-webkit-scrollbar-thumb:hover {
+            background: #5a67d8;
+        }
+    </style>
+    <script>
+        let isLoading = false;
+
+        async function sendPrompt(promptInputValue) {
+            if (isLoading) return;
+
+            const promptInput = promptInputValue || document.getElementById("prompt").value;
+            const responseDiv = document.getElementById("response");
+            const loadingDiv = document.getElementById("loading");
+
+            if (!promptInput.trim()) return;
+
+            setLoadingState(true);
+
+            try {
+                const response = await fetch('/api/response', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptInput })
+                });
+
+                const data = await response.json();
+                if (data.status === "success") {
+                    responseDiv.innerHTML += `<p><strong>You:</strong> ${promptInput}</p>`;
+                    responseDiv.innerHTML += `<p><strong>Narrator:</strong> ${data.response}</p>`;
+                    
+                    // Auto-scroll to bottom
+                    responseDiv.scrollTop = responseDiv.scrollHeight;
+                } else {
+                    responseDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+                    responseDiv.scrollTop = responseDiv.scrollHeight;
+                }
+            } catch (err) {
+                responseDiv.innerHTML += `<p><strong>Error:</strong> Failed to connect to the server.</p>`;
+                responseDiv.scrollTop = responseDiv.scrollHeight;
+            }
+
+            document.getElementById("prompt").value = "";
+            setLoadingState(false);
+        }
+
+        function sendChoice(choice) {
+            sendPrompt(choice.toString());
+        }
+
+        function setLoadingState(loading) {
+            isLoading = loading;
+            const loadingDiv = document.getElementById("loading");
+            const sendBtn = document.querySelector(".send-btn");
+            const promptInput = document.getElementById("prompt");
+            const choiceBtns = document.querySelectorAll(".choice-btn");
+
+            if (loading) {
+                loadingDiv.style.display = "block";
+                sendBtn.disabled = true;
+                promptInput.disabled = true;
+                choiceBtns.forEach(btn => btn.disabled = true);
+            } else {
+                loadingDiv.style.display = "none";
+                sendBtn.disabled = false;
+                promptInput.disabled = false;
+                choiceBtns.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        // Add event listener for "Enter" key
+        document.addEventListener("DOMContentLoaded", () => {
+            const promptInput = document.getElementById("prompt");
+            const sendButton = document.querySelector(".send-btn");
+
+            promptInput.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" && !isLoading) {
+                    event.preventDefault();
+                    sendPrompt();
+                }
+            });
+
+            // Focus on input when page loads
+            promptInput.focus();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to RPG Adventure</h1>
+        
+        <div id="response">
+            <p><strong>System:</strong> Welcome to the RPG Adventure! Start by typing your initial message or setup for the game. The narrator will guide you through an exciting story with choices to make along the way.</p>
+        </div>
+
+        <div id="loading" class="loading">
+            The narrator is crafting your story...
+        </div>
+
+        <div class="input-section">
+            <input type="text" id="prompt" placeholder="Enter your message or choice (1, 2, 3, or 4)..." maxlength="500">
+            <button class="send-btn" onclick="sendPrompt()">Send</button>
+        </div>
+
+        <div class="choices-section"> 
+            <button class="choice-btn" onclick="sendChoice(1)">Choice 1</button>
+            <button class="choice-btn" onclick="sendChoice(2)">Choice 2</button>
+            <button class="choice-btn" onclick="sendChoice(3)">Choice 3</button>
+            <button class="choice-btn" onclick="sendChoice(4)">Choice 4</button>
+        </div>
+    </div>
+</body>
+</html>
