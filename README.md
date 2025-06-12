@@ -1,4 +1,4 @@
-# 🧙‍♂️ RPG Adventure Web App (Narrated by LLaMA 3.1)
+#  RPG Adventure Web App (Narrated by LLaMA 3.1)
 
 Welcome to **RPG Adventure**, a web-based role-playing game powered by LLaMA 3.1 through Ollama and built with Python Flask. This application lets players engage with an AI narrator who guides them through a fantasy storyline full of choices.
 
@@ -13,7 +13,7 @@ The system:
 - Remembers recent conversation history for coherence
 - Runs a Flask backend with memory endpoints and a styled frontend
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 | Tech              | Role                                    |
 |-------------------|------------------------------------------|
@@ -22,23 +22,23 @@ The system:
 | Ollama            | LLaMA 3.1 model execution                |
 | Deque (collections)| In-memory chat history management      |
 
-## 📦 Folder Structure
+## Folder Structure
 
 
 
 
-## 🚀 Features
+## Features
 
-- 🎮 **Interactive Story Mode**: Engage in a live RPG narrative with choices at every turn.
-- 🧠 **Contextual Memory**: Keeps track of the last 30 messages for dynamic storytelling.
-- 🧹 **Memory Tools**:
+- **Interactive Story Mode**: Engage in a live RPG narrative with choices at every turn.
+- **Contextual Memory**: Keeps track of the last 30 messages for dynamic storytelling.
+- **Memory Tools**:
   - `GET /api/memory/status` – Check memory usage
   - `POST /api/memory/clear` – Reset conversation history
   - `GET /api/memory/export` – Export past interactions
-- 💬 **Error Handling**: Detects and handles invalid choices gracefully.
-- ✨ **Responsive UI**: Aesthetically styled HTML/CSS layout with animations and mobile-friendly design.
+- **Error Handling**: Detects and handles invalid choices gracefully.
+- **Responsive UI**: Aesthetically styled HTML/CSS layout with animations and mobile-friendly design.
 
-## 🔧 Installation & Usage
+## Installation & Usage
 
 ### Requirements
 - Python 3.10+
